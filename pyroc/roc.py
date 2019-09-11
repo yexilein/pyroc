@@ -5,44 +5,39 @@ import numpy as np
 class Roc(object):
     local_roc_threshold = 0.55
     min_segment_length = 0.05
-    quasilinear_threshold = 0.005
-    min_quasilinear_length = 0.1
     
     def __init__(self, curve):
         self._curve = curve
         self._total_length = len(self._curve)
+        self.local_roc = self._create_local_auroc_matrix()
         self.null_segments = self._extract_null_segments()[0]
         if self.null_segments:
             self.longest_null_segment = self.null_segments[0]
         else:
             self.longest_null_segment = None
-        self.quasilinear_segments = self._extract_quasilinear_segments()[0]
         self.flip_interval, self.roc_flip = self._find_best_flip()
-        
-    def _extract_null_segments(self, abs_deviations = True):
+            
+    def _create_local_auroc_matrix(self):
+        partial_auc = np.cumsum(np.concatenate(([0], (self._curve[:-1] + self._curve[1:])/2)))
+        partial_auc = partial_auc - partial_auc[np.newaxis].T
+        indices = np.arange(self._total_length)[np.newaxis]
+        delta_x = indices - indices.T
+        delta_y = self._curve - self._curve[np.newaxis].T
+        with np.errstate(divide="ignore", invalid="ignore"):
+            # take partial AUC, normalize x to [0,1], remove offset, normalize y to [0,1]
+            result = (partial_auc / delta_x - self._curve[np.newaxis].T) / delta_y
+        result[np.logical_or(delta_x == 0, delta_y == 0)] = 0.5
+        result[np.tril_indices(result.shape[0])] = result.T[np.tril_indices(result.shape[0])]
+        return result
+    
+    def _extract_null_segments(self, abs_deviations=True):
         """Extract longest non-overlapping straight lines in curve"""
-        roc = np.zeros((self._total_length, self._total_length))
-        # TODO: replace that part of the code with (approximately)
-        #  contribution[i] = (y[i] + y[i+1]) / 2
-        #  result = cumsum(contribution)
-        #  result = result - contribution.T
-        #
-        for start in range(self._total_length-1):
-            for end in range(start+1, self._total_length):
-                segment_length = end - start
-                if (self._curve[end] - self._curve[start] > 0):
-                    local_roc = np.trapz((self._curve[start:(end+1)] - self._curve[start]) /
-                                         (self._curve[end] - self._curve[start]), dx = 1/segment_length)
-                else:
-                    local_roc = 0.5
-                roc[start, end] = local_roc
-                roc[end, start] = local_roc
-        np.fill_diagonal(roc, 0.5)
-
         if abs_deviations:
-            roc = abs(roc-0.5) + 0.5
+            local_roc = abs(self.local_roc-0.5) + 0.5
+        else:
+            local_roc = self.local_roc
 
-        return self._extract_segments(roc, self.local_roc_threshold, self.min_segment_length)
+        return self._extract_segments(local_roc, self.local_roc_threshold, self.min_segment_length)
         
     def _extract_segments(self, stat, threshold, min_length):
         indices = np.arange(self._total_length)[np.newaxis]
@@ -60,7 +55,7 @@ class Roc(object):
 
         return intervals, stats
 
-    def _extract_quasilinear_segments(self, absolute_deviation = True):
+    def extract_quasilinear_segments(self, quasilinear_threshold=0.005, min_quasilinear_length=0.1, absolute_deviation=True):
         deviation = np.zeros((self._total_length, self._total_length))
         for start in range(self._total_length-1):
             for end in range(start+1, self._total_length):
@@ -70,15 +65,15 @@ class Roc(object):
                 else:
                     deviation[start, end] = max(self._curve[start:(end+1)] - interpolated_curve)
                 deviation[end, start] = deviation[start, end]
-        return  self._extract_segments(deviation, self.quasilinear_threshold, self.min_quasilinear_length)
+        return self._extract_segments(deviation, quasilinear_threshold, min_quasilinear_length)[0]
     
     def _find_best_flip(self):
         """Find flip that maximizes AUROC improvement (if ties, longest such flip)"""
-        rocs = np.zeros((self._total_length, self._total_length))
-        for start in range(self._total_length-1):
-            for end in range(start+1, self._total_length):
-                flipped_curve = self.flip_segment(start, end)
-                rocs[start, end] = np.trapz(flipped_curve, dx = 1/(len(flipped_curve)-1))
+        indices = np.arange(self._total_length)[np.newaxis]
+        delta_x = (indices - indices.T)  / (self._total_length-1)
+        delta_y = self._curve - self._curve[np.newaxis].T
+        rocs = self.roc() + (1-2*self.local_roc)*delta_y*delta_x
+        
         new_roc = np.max(rocs)
         max_indices = np.argwhere(rocs == new_roc)
         longest_segment = np.argmax(np.diff(max_indices))
