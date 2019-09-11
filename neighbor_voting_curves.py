@@ -6,8 +6,10 @@ from pyroc import compute_neighbor_voting, Roc
 
 
 def main():
-    curves = np.loadtxt("new_data/ppi_curves_legacy.txt")
-    export_stats(curves, "new_data/ppi_legacy_")
+    generate_ppi_curves()
+    generate_coexp_curves()
+    
+def compute_stats():
     curves = np.loadtxt("new_data/coexp_curves_legacy.txt")
     export_stats(curves, "new_data/coexp_legacy_")
     
@@ -15,19 +17,23 @@ def main():
 def generate_ppi_curves():
     ppi_used = scipy.io.mmread("legacy/new_data/ppi_used.mtx").A
     go_used = scipy.io.mmread("legacy/new_data/GO_used.mtx").A
+    n_genes = np.sum(go_used, axis = 0)
+    go_used = go_used[:, n_genes > 2]
     stats = compute_neighbor_voting(ppi_used, go_used)
     rocs, aurocs = zip(*stats)
-    np.savetxt("new_data/ppi_curves_legacy.txt", rocs)
-    np.savetxt("new_data/ppi_aurocs_legacy.txt", aurocs)
+    np.savetxt("new_data/ppi_curves_legacy_modulo.txt", rocs)
+    np.savetxt("new_data/ppi_aurocs_legacy_modulo.txt", aurocs)
 
 
 def generate_coexp_curves():
     coexp_used = np.loadtxt("legacy/new_data/coexp_used.txt")
     go_used = scipy.io.mmread("legacy/new_data/GO_used.mtx").A
+    n_genes = np.sum(go_used, axis = 0)
+    go_used = go_used[:, n_genes > 2]
     stats = compute_neighbor_voting(coexp_used, go_used)
-    aurocs, rocs = zip(*stats)
-    np.savetxt("new_data/coexp_curves_legacy.txt", rocs)
-    np.savetxt("new_data/coexp_aurocs_legacy.txt", aurocs)
+    rocs, aurocs = zip(*stats)
+    np.savetxt("new_data/coexp_curves_legacy_modulo.txt", rocs)
+    np.savetxt("new_data/coexp_aurocs_legacy_modulo.txt", aurocs)
     
 
 def export_stats(curves, fileprefix):

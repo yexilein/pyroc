@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.stats
 from collections import Counter
+from sklearn.metrics import roc_curve
 
 
 def compute_neighbor_voting(network, positive_matrix, n_folds = 3):
@@ -10,7 +11,7 @@ def compute_neighbor_voting(network, positive_matrix, n_folds = 3):
     return result
 
 def compute_neighbor_voting_one_positive(network, node_degrees, positives, n_folds = 3):
-    train_positives, test_positives = make_cv_vectors(positives, n_folds)
+    train_positives, test_positives = make_cv_vectors_modulo(positives, n_folds)
     votes = train_positives.dot(network) / node_degrees
     roc = [compute_roc(v[is_train == 0], p[is_train == 0])
            for v, p, is_train in zip(votes, test_positives, train_positives)]
@@ -31,8 +32,20 @@ def make_cv_vectors(positives, n_folds = 3):
 
     train_positives = positives - test_positives
     return train_positives, test_positives
+
+def make_cv_vectors_modulo(positives, n_folds = 3):
+    test_positives = np.zeros(n_folds*len(positives)).reshape(n_folds, len(positives))
+    nonzero_indices = np.flatnonzero(positives)
+    for i in range(n_folds):
+        test_positives[i, nonzero_indices[range(i, len(nonzero_indices), n_folds)]] =  1
+    train_positives = positives - test_positives
+    return train_positives, test_positives
     
 def compute_roc(predictor, positives, n_points = 200):
+    result = roc_curve(positives, predictor)
+    return(standardize_roc(result, n_points))
+    
+def compute_roc_old(predictor, positives, n_points = 200):
     positive_structure = order_positives(predictor, positives)
     result = convert_ordered_positives_to_roc(positive_structure)
     return(standardize_roc(result, n_points))
