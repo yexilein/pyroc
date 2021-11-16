@@ -1,5 +1,5 @@
 
-This directory contains the scripts generating ROC curves and extracting FECs from Protein-Protein Interaction networks and co-expression networks. The scripts assume the existence of the following (empty) directories: curves, figs, panels, stats.
+This directory contains the scripts generating ROC curves and extracting FECs from Protein-Protein Interaction networks and co-expression networks. The scripts assume the existence of the following (empty) directories: figs, panels, curves, curves/coexp, curves/ppi, curves/ppi_binary, stats, stats/coexp, stats/ppi, stats/ppi_binary.
 
 Run in the following order:
  - 01_make_go_curves.py: Generate ROC curves for all GO terms from the PPI and co-expression networks. Results are stored in "curves".

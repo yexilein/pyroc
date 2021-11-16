@@ -3,7 +3,7 @@ library(tidyverse)
 
 
 mouse_go = function() {
-    result = load_go("data/go_mouse")
+    result = load_go("../01_data/go_mouse")
     return(result)
 }
 

@@ -19,6 +19,8 @@ Description of files and directories
 Here is an overall description of the elements found in the root directory:
  - 01_data: this directory contains all the scripts needed to download and pre-process the data for subsequent analyses (see 01_data/README for further details).
  - 02_markers: this directory contains all the scripts needed to reproduce all analyses related to marker gene FECs in single-cell data (see 02_markers/README for further details).
- - pyroc: this directory contains the Python module used to analyze ROC curves (e.g., extraction of linear segments). The module is used by other scripts in the project, there is nothing to run in this directory.
+ - 03_coexp_ppi: this directory contains all the scripts needed to reproduce all analyses related to FECs extracted from functional predictions based on PPI and co-expression networks (see 03_coexp_ppi/README for further details).
+ - 04_literature: this directory contains all the scripts needed to reproduce all analyses related to FECs extracted from published ROC curves (see 04_literature/README for further details).
+ - pyroc: this directory contains the Python module used to analyze ROC curves (e.g., extraction of FECs). The module is used by other scripts in the project, there is nothing to run in this directory.
  - data.py: utility script that makes data available to Python scripts.
  - data.R: utility script that makes data available to R scripts.
