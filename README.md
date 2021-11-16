@@ -6,6 +6,8 @@ Requirements
 
 The code contains a mixture of shell scripts (downloading data), Python (analysis of ROC curve) and R (data handling, analysis of results and figure generation). The code was tested and run on a Linux server with CentOS7, Python 3.7.3 and R 4.0.5.
 
+To run scripts on a command line, use `sh <shell_script>.sh`, `python <python_script>.py`, `Rscript <shell_script>.R`.
+
 Required packages for Python are: numpy, pandas, seaborn, scipy.stats, scipy.io, sklean.metrics, h5py.
 
 Required packages for R are: tidyverse, Matrix, org.Mm.eg.db, rhdf5, rjson, ontologyIndex.
