@@ -1,5 +1,5 @@
 # CoCoCoNET (co-expression)
-wget ftp://milton.cshl.edu/data/networks/mouse_prioAggNet.hdf5 -O mouse_coconet_210420.hdf5
+wget http://labshare.cshl.edu/shares/gillislab/resource/CoCoCoNet/networks/mouse_HC_AggNet.hdf5 -O mouse_cococonet_210420.hdf5
 
 # BIOGRID (PPI)
 wget https://downloads.thebiogrid.org/Download/BioGRID/Release-Archive/BIOGRID-4.4.197/BIOGRID-ALL-4.4.197.tab2.zip

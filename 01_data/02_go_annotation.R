@@ -8,7 +8,7 @@ this_directory__ = getwd()
 
 
 main = function() {
-    export_go_matrix(make_go_mouse(), "mouse", ".")
+    export_go_matrix(make_go_mouse(), "go_mouse")
 }
 
 make_go_mouse = function(go_slim = FALSE) {
@@ -18,8 +18,8 @@ make_go_mouse = function(go_slim = FALSE) {
                     
 make_go_matrix = function(filename, go_slim = FALSE) {
     go_table = read_go_annotation(filename)
-    go_terms = go_table$V5
-    gene_symbols = go_table$V3
+    go_terms = as.factor(go_table$V5)
+    gene_symbols = as.factor(go_table$V3)
     
     ontology = get_ontology(file.path(this_directory__, "go-basic_181219.obo"), extract_tags = "everything")
     ancestor_matrix = get_ancestor_matrix_from_obo(ontology)
@@ -72,10 +72,10 @@ get_ancestor_matrix_from_obo = function(ontology) {
                           dimnames = list(levels(terms), levels(ancestors)))
 }
 
-export_go_matrix = function(go_matrix, file_prefix, subdir = "go") {
-    writeMM(go_matrix, file.path(this_directory__, "data", subdir, paste0(file_prefix, ".txt")))
-    write(rownames(go_matrix), file.path(this_directory__, "data", subdir, paste0(file_prefix, "_row_labels.txt")))
-    write(colnames(go_matrix), file.path(this_directory__, "data", subdir, paste0(file_prefix, "_col_labels.txt")))
+export_go_matrix = function(go_matrix, file_prefix) {
+    writeMM(go_matrix, file.path(this_directory__, paste0(file_prefix, ".txt")))
+    write(rownames(go_matrix), file.path(this_directory__, paste0(file_prefix, "_row_labels.txt")))
+    write(colnames(go_matrix), file.path(this_directory__, paste0(file_prefix, "_col_labels.txt")))
 }
 
 if (sys.nframe() == 0) {

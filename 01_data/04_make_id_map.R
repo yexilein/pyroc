@@ -8,7 +8,7 @@ main = function() {
 }
 
 make_mouse_id_map = function(filename) {
-    ensembl_ids = h5read("mouse_coconet_210420.hdf5", "/col")
+    ensembl_ids = h5read("mouse_cococonet_210420.hdf5", "/col")
     # only keep 1:1 mappings
     symbols = mapIds(org.Mm.eg.db, ensembl_ids, "SYMBOL", "ENSEMBL", multiVals="asNA")
     symbols = enframe(symbols, name = "ensembl", value = "symbol")
