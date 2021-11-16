@@ -8,9 +8,9 @@ The code contains a mixture of shell scripts (downloading data), Python (analysi
 
 To run scripts on a command line, use `sh <shell_script>.sh`, `python <python_script>.py`, `Rscript <shell_script>.R`.
 
-Required packages for Python are: numpy, pandas, seaborn, scipy.stats, scipy.io, sklean.metrics, h5py.
+Required packages for Python are: numpy, pandas, seaborn, matplotlib.pyplot, scipy.stats, scipy.io, scipy.sparse, sklean.metrics, h5py.
 
-Required packages for R are: tidyverse, Matrix, org.Mm.eg.db, rhdf5, rjson, ontologyIndex.
+Required packages for R are: tidyverse, Matrix, org.Mm.eg.db, rhdf5, rjson, ontologyIndex, ggupset, MetaMarkers (https://github.com/gillislab/MetaMarkers), SingleCellExperiment.
 
 
 Description of files and directories
