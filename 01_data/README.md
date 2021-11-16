@@ -1,5 +1,7 @@
 
-Files used to download and pre-process data:
+Files used to download and pre-process data.
+
+Run in the following order:
  - 01_download_data.sh: download data from GO, MGI, BIOGRID and CoCoCoNET.
  - 02_go_annotations.R: filter and transform GO data in sparse matrix format.
  - 03_biogrid.R: filter and transform BIOGRID data in sparse matrix format.

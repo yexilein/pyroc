@@ -17,5 +17,6 @@ Description of files and directories
 ------------------------------------
 
 Here is an overall description of the elements found in the root directory:
- - 01_data: this directory contains all the scripts needed to download and pre-process the data for subsequent analyses.
+ - 01_data: this directory contains all the scripts needed to download and pre-process the data for subsequent analyses (see 01_data/README for further details).
+ - 02_markers: this directory contains all the scripts needed to reproduce all analyses related to marker gene FECs in single-cell data (see 02_markers/README for further details).
  - pyroc: this directory contains the Python module used to analyze ROC curves (e.g., extraction of linear segments). The module is used by other scripts in the project, there is nothing to run in this directory.
