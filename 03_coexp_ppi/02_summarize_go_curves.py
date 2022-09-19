@@ -23,11 +23,17 @@ def main():
     export_stats("curves", "ppi_binary/node_degree_")
     export_stats("curves", "ppi_binary/go_prior_")
 
+    export_stats("curves", "codomain_sparse/")
+    export_stats("curves", "codomain/")
+
+    export_stats("curves", "coexp_dti/", gs_file="dti_terms.txt")
+    export_stats("curves", "ppi_dti/", gs_file="dti_terms.txt")
+
     
-def export_stats(input_dir, file_prefix, output_dir="stats"):
+def export_stats(input_dir, file_prefix, output_dir="stats", gs_file="go_terms.txt"):
     output_prefix = os.path.join(output_dir, file_prefix)
     curves = np.loadtxt(os.path.join(input_dir, file_prefix + "curves.txt"))
-    go_terms = pd.read_csv(os.path.join(input_dir, "go_terms.txt"), sep="\t")
+    go_terms = pd.read_csv(os.path.join(input_dir, gs_file), sep="\t")
     stats = [pyroc.Roc.from_curve(c, n) for c, n in zip(curves, go_terms["Number of genes"])]
     np.savetxt(output_prefix + "all_null_segments.txt",
                np.vstack([np.c_[i*np.ones(len(s.null_segments)), np.array(s.null_segments)] for i, s in enumerate(stats) if s.null_segments]))

@@ -13,3 +13,4 @@ load_go = function(file_prefix) {
     colnames(result) = readLines(paste0(file_prefix, "_col_labels.txt"))
     return(result)
 }
+

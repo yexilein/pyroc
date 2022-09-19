@@ -15,13 +15,16 @@ def load_coexp(file_prefix):
     return network, genes
 
 def mouse_ppi():
-    return load_ppi(os.path.join(DATA_DIR, "biogrid_mouse"))
+    return load_interaction_network(os.path.join(DATA_DIR, "biogrid_mouse"), "_ppi")
 
-def load_ppi(file_prefix):
-    network = scipy.io.mmread(file_prefix + "_ppi.txt").A
+def load_interaction_network(file_prefix, suffix=""):
+    network = scipy.io.mmread(file_prefix + suffix + ".txt").A
     with open(file_prefix + "_genes.txt") as fp:
         genes = fp.read().splitlines()
     return network, genes
+
+def mouse_codomain():
+    return load_interaction_network(os.path.join(DATA_DIR, "codomain_mouse"))
 
 def load_go_mouse():
     result = load_go(os.path.join(DATA_DIR, "go_mouse"))
@@ -56,3 +59,7 @@ def mouse_common_genes():
     with open(os.path.join(DATA_DIR, "mouse_common_genes.txt")) as fp:
         genes = fp.read().splitlines()
     return genes
+
+def load_dti_mouse():
+    result = load_go(os.path.join(DATA_DIR, "stitch_mouse"))
+    return result[0].T, result[2], result[1]

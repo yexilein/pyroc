@@ -12,7 +12,7 @@ main = function() {
 
     go_term = "GO:0008083|growth factor activity|molecular_function" # 0.135
     #go_term = "GO:0043413|macromolecule glycosylation|biological_process" # 0.4
-    i = stats$`Curve index`[stats$`GO term` == go_term]
+    i = stats$`Curve index`[stats$`Gene set` == go_term]
     predictor = t(read.table("curves/coexp/predictors.txt", skip = i, nrows = 1))[,1]
     labels = mouse_go()[go_term,genes]
     
