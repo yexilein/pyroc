@@ -2,4 +2,4 @@ This directory contains the scripts generating ROC curves and extracting FECs fo
 
 Run the scripts in following order:
  - 01_compute_markers.R: compute markers for all cell types. Results are stored in "de_lists".
- - 02_plot_fecs.R: extract and plot FECs for B cells. Results are stored in "fec" and "figs".
+ - 02_plot_fecs.R: extract and plot FECs for B cells (Fig. 5). Results are stored in "fec" and "figs".

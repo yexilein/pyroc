@@ -4,5 +4,5 @@ This directory contains the scripts generating ROC curves and extracting FECs fr
 Run in the following order:
  - 01_make_go_curves.py: Generate ROC curves for all GO terms from the PPI and co-expression networks. Results are stored in "curves".
  - 02_summarize_go_curves.py: Extract FECs and other summary statistics from ROC curves. Results are stored in "stats".
- - 03_plot_panels.R: Generate panels for figures 4 and 5. Results are stored in "panels".
- - 04_plot_permutations.R: Generate panels for Figure 3 (robustness of FECs to label permutations). Results are stored in "figs".
+ - 03_plot_panels.R: Generate panels for figures 3 and 4. Results are stored in "panels".
+ - 04_plot_permutations.R: Generate panels for Figure S2 (robustness of FECs to label permutations). Results are stored in "figs".
