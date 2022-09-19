@@ -3,3 +3,7 @@
 *.obo
 *.hdf5
 *.csv
+*.gz
+*.tsv
+*.zip
+download_interpro.py
